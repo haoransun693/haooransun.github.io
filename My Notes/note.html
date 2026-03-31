@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的笔记</title>
+    <title>我的笔记库</title>
     <style>
-        /* 全局样式重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        /* --- 你的原始样式保持不变 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
             background-color: #f4f6f8;
@@ -20,15 +15,7 @@
             min-height: 100vh;
             padding: 20px 0;
         }
-
-        /* 容器：让内容居中并设置最大宽度 */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* 卡片式布局：每个项目一个卡片 */
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
         .card {
             background: white;
             margin-bottom: 30px;
@@ -37,34 +24,10 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
         }
-
-        /* 鼠标悬停效果 */
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        /* 标题样式 */
-        h2 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 5px;
-            display: inline-block;
-        }
-
-        /* 段落样式 */
-        p {
-            color: #555;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        /* 按钮容器：让按钮居中 */
-        .btn-container {
-            text-align: center;
-        }
-
-        /* 按钮样式 */
+        .card:hover { transform: translateY(-2px); }
+        h2 { color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; display: inline-block; }
+        p { color: #555; margin-bottom: 20px; font-size: 16px; }
+        .btn-container { text-align: center; }
         .btn {
             display: inline-block;
             padding: 12px 30px;
@@ -78,56 +41,147 @@
             cursor: pointer;
             font-size: 16px;
         }
+        .btn:hover { background-color: #2980b9; }
+        footer { text-align: center; margin-top: 40px; color: #999; font-size: 14px; }
 
-        /* 按钮悬停效果 */
-        .btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* 特殊按钮样式（例如“项目”按钮） */
-        .btn-project {
-            background-color: #27ae60;
-        }
-
-        .btn-project:hover {
-            background-color: #219150;
-        }
-
-        /* 页脚 */
-        footer {
+        /* --- 新增的功能样式 --- */
+        
+        /* 1. 头部搜索区域 */
+        .header-area {
             text-align: center;
-            margin-top: 40px;
-            color: #999;
-            font-size: 14px;
+            margin-bottom: 40px;
         }
+        .search-box {
+            margin-top: 20px;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.2);
+        }
+
+        /* 2. 标签样式 */
+        .tags {
+            margin-bottom: 10px;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #eef2f7;
+            color: #576574;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 8px;
+            font-weight: 500;
+        }
+
+        /* 3. 元数据样式 (时间、阅读量) */
+        .meta-info {
+            font-size: 13px;
+            color: #999;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 15px;
+        }
+        .meta-item::before {
+            margin-right: 5px;
+            display: inline-block;
+            transform: translateY(1px);
+        }
+        /* 简单的图标模拟 */
+        .icon-date::before { content: '📅'; }
+        .icon-time::before { content: '⏱️'; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- 第一个卡片：个人简介 -->
-        <div class="card">
-            <h2>C++双指针</h2>
-            <p>双指针对数组字符串的简单处理实例</p>
-            <div class="btn-container">
-                <a href="C++双指针学习.md" target="_blank" class="btn">read more</a>
+        
+        <!-- 新增：头部和搜索功能 -->
+        <div class="header-area">
+            <h1>我的知识库</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索笔记标题或内容...">
             </div>
         </div>
 
-        <!-- 你可以在这里添加更多卡片 -->
-        <!-- <div class="card">
-            <h2>其他项目</h2>
-            <p>这是另一个项目的介绍。</p>
-            <div class="btn-container">
-                <a href="https://另一个项目链接.com" target="_blank" class="btn">查看项目</a>
+        <!-- 笔记卡片 1 -->
+        <div class="card" data-tags="c++ 算法 双指针">
+            <!-- 新增：标签 -->
+            <div class="tags">
+                <span class="tag">C++</span>
+                <span class="tag">算法</span>
             </div>
-        </div> -->
+            <h2>C++双指针技巧</h2>
+            
+            <!-- 新增：元数据 -->
+            <div class="meta-info">
+                <span class="meta-item icon-date">2026-03-31</span>
+                <span class="meta-item icon-time">阅读约 3 分钟</span>
+            </div>
+
+            <p>双指针对数组字符串的简单处理实例，包含快慢指针的核心逻辑与实战演练。</p>
+            <div class="btn-container">
+                <a href="C++双指针学习.md" target="_blank" class="btn">阅读笔记</a>
+            </div>
+        </div>
+
+        <!-- 笔记卡片 2 (示例) -->
+        <div class="card" data-tags="python 爬虫 自动化">
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">工具</span>
+            </div>
+            <h2>Python 自动化脚本</h2>
+            <div class="meta-info">
+                <span class="meta-item icon-date">2026-03-28</span>
+                <span class="meta-item icon-time">阅读约 5 分钟</span>
+            </div>
+            <p>整理了一些常用的 Python 自动化脚本，用于文件批量处理和网页数据抓取。</p>
+            <div class="btn-container">
+                <a href="#" class="btn">阅读笔记</a>
+            </div>
+        </div>
 
         <footer>
             <p>© 2026 孙浩然. 保留所有权利。</p>
         </footer>
     </div>
 
+    <!-- 新增：搜索功能的 JavaScript 脚本 -->
+    <script>
+        // 获取输入框和所有卡片
+        const searchInput = document.getElementById('searchInput');
+        const cards = document.querySelectorAll('.card');
+
+        // 监听输入事件
+        searchInput.addEventListener('input', function(e) {
+            const searchText = e.target.value.toLowerCase(); // 获取输入并转为小写
+
+            cards.forEach(card => {
+                // 获取卡片的标题和描述文本
+                const title = card.querySelector('h2').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                const tags = card.getAttribute('data-tags').toLowerCase();
+
+                // 判断是否包含搜索词
+                if (title.includes(searchText) || desc.includes(searchText) || tags.includes(searchText)) {
+                    card.style.display = 'block'; // 显示
+                } else {
+                    card.style.display = 'none'; // 隐藏
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
-
