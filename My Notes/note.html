@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的笔记库</title>
-    <!-- 引入 marked.js 用于把 Markdown 变成 HTML -->
+    <!-- 引入 marked.js 用于解析 Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         /* --- 基础样式 --- */
@@ -14,12 +14,11 @@
             background-color: #f4f6f8;
             line-height: 1.6;
             color: #333;
-            min-height: 100vh;
             padding: 20px 0;
         }
         .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
         
-        /* --- 头部搜索 --- */
+        /* --- 头部 --- */
         .header-area { text-align: center; margin-bottom: 40px; }
         .search-input {
             width: 100%; padding: 15px 20px; border-radius: 8px;
@@ -32,114 +31,101 @@
         .card {
             background: white; margin-bottom: 30px; padding: 30px;
             border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
         }
-        .card:hover { transform: translateY(-2px); }
         
-        /* --- 内容排版样式 --- */
-        h2 { color: #2c3e50; margin-bottom: 15px; border-bottom: 2px solid #3498db; padding-bottom: 5px; }
-        .tags { margin-bottom: 10px; }
-        .tag { display: inline-block; background-color: #eef2f7; color: #576574; padding: 4px 10px; border-radius: 4px; font-size: 12px; margin-right: 8px; }
-        
-        /* 处理抓下来的 Markdown 内容 */
-        .issue-content { color: #444; font-size: 16px; }
-        .issue-content img { max-width: 100%; border-radius: 5px; }
-        .issue-content pre { background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto; border: 1px solid #ddd; margin: 15px 0; }
-        .issue-content code { background: #f4f4f4; padding: 2px 5px; border-radius: 3px; color: #e83e8c; }
-        .issue-content blockquote { border-left: 4px solid #3498db; padding-left: 15px; color: #666; margin: 15px 0; }
-
-        footer { text-align: center; margin-top: 40px; color: #999; font-size: 14px; }
+        /* --- 加载中/错误样式 --- */
+        .loading, .error { text-align: center; padding: 40px; color: #666; font-size: 16px; }
+        .error { color: #cf222e; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        
         <div class="header-area">
             <h1>我的知识库</h1>
-            <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索笔记...">
-            </div>
+            <input type="text" id="searchInput" class="search-input" placeholder="搜索笔记标题...">
         </div>
 
-        <!-- 笔记卡片区域 -->
+        <!-- 笔记列表容器 -->
         <div id="notes-container">
-            <!-- 这里会被 JavaScript 自动填充 -->
+            <div class="loading">🚀 正在自动加载 GitHub Issues 中的笔记，请稍候...</div>
         </div>
-
-        <footer>
-            <p>© 2026 孙浩然. 保留所有权利。</p>
-        </footer>
     </div>
 
     <script>
-        // ================= 核心修改点 =================
-        // 1. 直接在这里写入你的 Markdown 内容
-        // 这样就不需要去网络上抓取了，绝对不会报错，加载最快！
-        const markdownContent = `
-### 双指针法（Two Pointers）核心笔记
-
-**场景**：数组操作、原地修改、保持顺序。
-**优势**：时间复杂度 O(n)，空间复杂度 O(1)。
-
-#### 核心思想
-- **快指针 (fast)**：负责遍历数组，检查元素是否满足条件。
-- **慢指针 (slow)**：负责记录满足条件元素的位置，最终指向新数组末尾。
-
-#### 应用场景
-1. **移除元素 (LeetCode 27)**
-   - **目标**：移除等于 val 的元素。
-   - **逻辑**：快指针遍历，若不等于 val，赋值给慢指针位置。
-   
-2. **删除有序数组中的重复项 (LeetCode 26)**
-   - **目标**：每个元素只出现一次。
-   - **逻辑**：比较当前元素与前一个元素，不同则保留。
-
-\`\`\`c++
-class Solution {
-public:
-    int removeDuplicates(vector<int>& nums) {
-        int k = 1;
-        for (int i = 1; i < nums.size(); i++) {
-            if (nums[i] != nums[k - 1]) {
-                nums[k] = nums[i];
-                k++;
-            }
-        }
-        return k;
-    }
-};
-\`\`\`
-
-3. **删除有序数组中的重复项 II (LeetCode 80)**
-   - **目标**：每个元素最多出现两次。
-   - **逻辑**：慢指针向前看两个位置，判断是否已出现两次。
-        `;
-
-        // 2. 页面加载完成后，直接渲染
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", async function () {
             const container = document.getElementById('notes-container');
-            
-            // 使用 marked 库将 Markdown 转为 HTML
-            const htmlBody = marked.parse(markdownContent);
-            
-            // 生成卡片
-            const cardHTML = `
-                <div class="card">
-                    <div class="tags">
-                        <span class="tag">C++</span>
-                        <span class="tag">算法</span>
-                        <span class="tag">双指针</span>
+            const searchInput = document.getElementById('searchInput');
+
+            try {
+                // 1. 使用反向代理解决跨域
+                // 这里使用 allorigins.win，它会帮我们去请求 GitHub API，然后把结果发给我们
+                // 替换下面的 "sunhaoran" 为你自己的用户名
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(
+                    `https://api.github.com/repos/sunhaoran/sunhaoran.github.io/issues?state=open`
+                )}`;
+
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error('网络错误');
+
+                const issues = await response.json();
+
+                // 2. 如果没有 Issue
+                if (issues.length === 0) {
+                    container.innerHTML = '<p>📭 暂无笔记，请去 GitHub 新建一个 Issue 吧！</p>';
+                    return;
+                }
+
+                // 3. 生成所有笔记卡片
+                let notesHTML = '';
+                issues.forEach(issue => {
+                    // 提取 Issue 的标题和内容
+                    const title = issue.title;
+                    const body = issue.body;
+                    // 生成唯一的 ID (用 Issue 编号)
+                    const id = issue.number;
+
+                    // 使用 marked 解析 Markdown
+                    const contentHtml = marked.parse(body);
+
+                    // 拼接卡片 HTML
+                    notesHTML += `
+                    <div class="card" data-id="${id}" data-title="${title.toLowerCase()}">
+                        <h2>${title}</h2>
+                        <div class="note-content">
+                            ${contentHtml}
+                        </div>
+                        <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+                        <div class="meta">Issue #${id} · 自动同步</div>
                     </div>
-                    <h2>C++ 双指针学习笔记</h2>
-                    <div class="issue-content">
-                        ${htmlBody}
-                    </div>
-                </div>
-            `;
-            container.innerHTML = cardHTML;
+                    `;
+                });
+
+                container.innerHTML = notesHTML;
+
+                // 4. 搜索功能 (基于标题)
+                searchInput.addEventListener('input', function(e) {
+                    const query = e.target.value.toLowerCase();
+                    document.querySelectorAll('.card').forEach(card => {
+                        const title = card.getAttribute('data-title');
+                        if (title.includes(query)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error("加载失败:", error);
+                container.innerHTML = `
+                <div class="error">
+                    <h3>❌ 加载失败</h3>
+                    <p>可能是网络问题，或者你还没有创建 Issue。</p>
+                    <p><small>错误信息: ${error.message}</small></p>
+                </div>`;
+            }
         });
     </script>
-
 </body>
 </html>
