@@ -64,11 +64,6 @@
         .source-link a { color: #3498db; text-decoration: none; }
         .source-link a:hover { text-decoration: underline; }
 
-        .output-box {
-            background: #1e2127; color: #a5d6ff; padding: 20px; border-radius: 8px;
-            font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.7; overflow-x: auto;
-        }
-
         footer { text-align: center; padding: 40px 0; background: #333; color: #fff; font-size: 0.9rem; }
 
         @media (max-width: 768px) {
@@ -85,7 +80,6 @@
                 <a href="../Project/index.html">← 返回项目列表</a>
                 <a href="#intro">项目介绍</a>
                 <a href="#features">核心亮点</a>
-                <a href="#result">运行效果</a>
                 <a href="#tech">技术栈</a>
             </nav>
         </div>
@@ -176,32 +170,6 @@ print(f"最高温度: {df['温度'].max():.1f}°C")</code></pre></div>
             "温度": str(e)
         }</code></pre></div>
             </div>
-        </div>
-    </section>
-
-    <section id="result" style="background-color: #f9f9f9;">
-        <div class="container">
-            <h2>运行效果</h2>
-            <div class="output-box"><pre style="margin: 0;"><span style="color: #89d185;">$</span> python weather_aggregator.py
-正在查询多城市天气...
-    城市    天气   温度   湿度
-    北京    晴     12°C   30%
-    上海    多云   18°C   55%
-    广州    小雨   24°C   80%
-    深圳    多云   23°C   75%
-    杭州    阴     16°C   65%
-    南京    晴     15°C   45%
-    成都    多云   19°C   70%
-    武汉    小雨   17°C   78%
-
-已保存到 weather_report.csv
-
-<span style="color: #89d185;">$</span> python analyze.py
-共查询 8 个城市
-成功: 8
-平均温度: 18.0°C
-最高温度: 24.0°C
-最低温度: 12.0°C</pre></div>
         </div>
     </section>
 
