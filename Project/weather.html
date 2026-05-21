@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多城市天气聚合器 - 项目展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px 0; position: sticky; top: 0; z-index: 100;
+        }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #222; }
+        .nav-links a { margin-left: 20px; font-size: 0.9rem; color: #555; }
+        .nav-links a:hover { color: #3498db; }
+
+        .hero {
+            text-align: center; padding: 80px 20px;
+            background: #fff; border-radius: 12px;
+            margin: 20px auto; max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; color: #222; }
+        .hero p { font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 40px; }
+        .hero .badge {
+            display: inline-block; background: #eee; color: #333;
+            padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; margin: 0 5px;
+        }
+
+        section { padding: 60px 0; }
+        h2 { font-size: 2rem; margin-bottom: 40px; text-align: center; position: relative; color: #222; }
+        h2::after { content: ''; display: block; width: 50px; height: 3px; background: #3498db; margin: 15px auto 0; }
+
+        .feature-row { margin-bottom: 60px; }
+        .feature-row:nth-child(even) { }
+        .feature-text { }
+        .feature-text h3 { font-size: 1.5rem; margin-bottom: 15px; color: #222; }
+        .feature-text p { color: #555; margin-bottom: 15px; }
+        .feature-text .highlight { background: #eef; padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #3498db; }
+
+        .code-demo {
+            width: 100%; margin-top: 20px;
+            background: #1e2127; border-radius: 12px; overflow: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding: 16px;
+        }
+        .code-demo pre { margin: 0; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.78rem; line-height: 1.6; color: #a5d6ff; }
+
+        .tech-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .tech-item { background: #fff; padding: 15px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: 500; }
+
+        .source-link { text-align: center; margin-top: 10px; margin-bottom: 10px; font-size: 0.85rem; }
+        .source-link a { color: #3498db; text-decoration: none; }
+        .source-link a:hover { text-decoration: underline; }
+
+        .output-box {
+            background: #1e2127; color: #a5d6ff; padding: 20px; border-radius: 8px;
+            font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.7; overflow-x: auto;
+        }
+
+        footer { text-align: center; padding: 40px 0; background: #333; color: #fff; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">☀️ 多城市天气聚合器</div>
+            <nav class="nav-links">
+                <a href="../Project/index.html">← 返回项目列表</a>
+                <a href="#intro">项目介绍</a>
+                <a href="#features">核心亮点</a>
+                <a href="#result">运行效果</a>
+                <a href="#tech">技术栈</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>多城市天气聚合器</h1>
+            <p>并发查询全国 8 个主要城市实时天气，Semaphore 限流，结果自动存 CSV 并用 pandas 分析</p>
+            <div>
+                <span class="badge">⏱ 并发查询</span>
+                <span class="badge">🔒 Semaphore 限流</span>
+                <span class="badge">📊 pandas 分析</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="intro">
+        <div class="container">
+            <h2>项目介绍</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto; color: #555;">
+                本项目使用 <strong>httpx</strong> 异步 HTTP 客户端 + <strong>asyncio</strong> 事件循环，
+                并发查询北京、上海、广州、深圳、杭州、南京、成都、武汉 8 个城市实时天气。
+                通过 <strong>Semaphore(3)</strong> 限制同时进行的请求数量，避免触发 API 限流。
+                查询结果自动保存为 <strong>CSV 文件</strong>，并用 <strong>pandas</strong> 进行统计分析和可视化。
+            </p>
+        </div>
+    </section>
+
+    <section id="features" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>核心亮点</h2>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>⏱ 异步并发 + Semaphore 限流</h3>
+                    <p>使用 <span class="highlight">asyncio.Semaphore(3)</span> 控制同时最多 3 个请求并发，避免瞬间大量请求导致 IP 被封或 API 限流。</p>
+                    <p>8 个城市总耗时 ≈ 最慢一个请求的时间，而不是排队 8 倍时间，<strong>效率提升 3-5 倍</strong>。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">async def fetch_one(client, city):
+    async with sem:  # 最多3个并发
+        resp = await client.get(
+            "https://api.seniverse.com/v3/weather/now.json",
+            params={"key": API_KEY, "location": city}
+        )
+        data = resp.json()["results"][0]
+        return {
+            "城市": data["location"]["name"],
+            "天气": data["now"]["text"],
+            "温度": data["now"]["temperature"]
+        }</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>📊 数据持久化 + pandas 分析</h3>
+                    <p>查询结果自动保存为 <span class="highlight">weather_report.csv</span>，编码为 <span class="highlight">utf-8-sig</span> 保证 Excel 正常打开。</p>
+                    <p>配套 <span class="highlight">analyze.py</span> 脚本：自动统计成功/失败数量、计算平均温度/最高温/最低温，方便后续可视化或报表生成。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">results = await asyncio.gather(*tasks)
+df = pd.DataFrame(results)
+df.to_csv("weather_report.csv",
+          index=False,
+          encoding="utf-8-sig")
+
+# analyze.py
+df = pd.read_csv("weather_report.csv",
+                 encoding="utf-8-sig")
+print(f"平均温度: {df['温度'].mean():.1f}°C")
+print(f"最高温度: {df['温度'].max():.1f}°C")</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>🛡 完善的错误处理</h3>
+                    <p>单个城市查询失败不影响其他城市：异常时自动记录失败信息（城市名 + 错误原因），保证整体流程不中断。</p>
+                    <p>实际应用场景中可直接扩展为 <span class="highlight">50+ 城市</span>，只需修改城市列表即可。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">async def fetch_one(client, city):
+    try:
+        async with sem:
+            resp = await client.get(...)
+            return resp.json()["results"][0]
+    except Exception as e:
+        return {
+            "城市": city,
+            "天气": "失败",
+            "温度": str(e)
+        }</code></pre></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="result" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>运行效果</h2>
+            <div class="output-box"><pre style="margin: 0;"><span style="color: #89d185;">$</span> python weather_aggregator.py
+正在查询多城市天气...
+    城市    天气   温度   湿度
+    北京    晴     12°C   30%
+    上海    多云   18°C   55%
+    广州    小雨   24°C   80%
+    深圳    多云   23°C   75%
+    杭州    阴     16°C   65%
+    南京    晴     15°C   45%
+    成都    多云   19°C   70%
+    武汉    小雨   17°C   78%
+
+已保存到 weather_report.csv
+
+<span style="color: #89d185;">$</span> python analyze.py
+共查询 8 个城市
+成功: 8
+平均温度: 18.0°C
+最高温度: 24.0°C
+最低温度: 12.0°C</pre></div>
+        </div>
+    </section>
+
+    <section id="tech">
+        <div class="container">
+            <h2>技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">httpx</div>
+                <div class="tech-item">asyncio</div>
+                <div class="tech-item">Semaphore</div>
+                <div class="tech-item">pandas</div>
+                <div class="tech-item">心知天气 API</div>
+            </div>
+        </div>
+    <footer>
+        <div class="container">
+            <div class="source-link">
+                <a href="https://github.com/your-username/your-repo" target="_blank">源码路径: https://github.com/your-username/your-repo</a>
+            </div>
+            <p>© 2026 孙浩然. 保留所有权利.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">由 孙浩然 设计并开发</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

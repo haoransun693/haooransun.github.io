@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 实时通信 - 项目展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px 0; position: sticky; top: 0; z-index: 100;
+        }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #222; }
+        .nav-links a { margin-left: 20px; font-size: 0.9rem; color: #555; }
+        .nav-links a:hover { color: #3498db; }
+
+        .hero {
+            text-align: center; padding: 80px 20px;
+            background: #fff; border-radius: 12px;
+            margin: 20px auto; max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; color: #222; }
+        .hero p { font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 40px; }
+        .hero .badge {
+            display: inline-block; background: #eee; color: #333;
+            padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; margin: 0 5px;
+        }
+
+        section { padding: 60px 0; }
+        h2 { font-size: 2rem; margin-bottom: 40px; text-align: center; position: relative; color: #222; }
+        h2::after { content: ''; display: block; width: 50px; height: 3px; background: #3498db; margin: 15px auto 0; }
+
+        .feature-row { margin-bottom: 60px; }
+        .feature-row:nth-child(even) { }
+        .feature-text { }
+        .feature-text h3 { font-size: 1.5rem; margin-bottom: 15px; color: #222; }
+        .feature-text p { color: #555; margin-bottom: 15px; }
+        .feature-text .highlight { background: #eef; padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #3498db; }
+
+        .code-demo {
+            width: 100%; margin-top: 20px;
+            background: #1e2127; border-radius: 12px; overflow: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding: 16px;
+        }
+        .code-demo pre { margin: 0; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.78rem; line-height: 1.6; color: #a5d6ff; }
+
+        .source-link { text-align: center; margin-top: 10px; margin-bottom: 10px; font-size: 0.85rem; }
+        .source-link a { color: #3498db; text-decoration: none; }
+        .source-link a:hover { text-decoration: underline; }
+
+        .tech-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .tech-item { background: #fff; padding: 15px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: 500; }
+
+        footer { text-align: center; padding: 40px 0; background: #333; color: #fff; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">💬 WebSocket 实时通信</div>
+            <nav class="nav-links">
+                <a href="../Project/index.html">← 返回项目列表</a>
+                <a href="#intro">项目介绍</a>
+                <a href="#features">核心亮点</a>
+                <a href="#tech">技术栈</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>WebSocket 实时通信</h1>
+            <p>基于 aiohttp 的 WebSocket 聊天服务端 + 客户端，支持多客户端实时广播消息</p>
+            <div>
+                <span class="badge">🔗 全双工通信</span>
+                <span class="badge">👥 多客户端</span>
+                <span class="badge">📡 实时广播</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="intro">
+        <div class="container">
+            <h2>项目介绍</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto; color: #555;">
+                基于 <strong>aiohttp</strong> 框架构建 WebSocket 服务端与客户端。服务端维护在线客户端集合，
+                收到任意客户端消息后，自动广播给其他所有在线客户端，同时显示当前在线人数。
+                客户端支持收发文本消息，连接断开时自动清理。代码极简（服务端仅 <strong>30 行</strong>），
+                适合作为实时通信、在线客服、协作编辑等场景的基础组件。
+            </p>
+        </div>
+    </section>
+
+    <section id="features" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>核心亮点</h2>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>👥 多客户端实时广播</h3>
+                    <p>使用 <span class="highlight">set()</span> 维护所有在线 WebSocket 连接，收到消息后遍历集合向其他客户端转发。</p>
+                    <p>每条消息自动携带 <span class="highlight">当前在线人数</span>（如 "[3人在线] 你好"），让用户感知实时状态。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">clients = set()
+
+async def ws_handler(request):
+    ws = web.WebSocketResponse()
+    await ws.prepare(request)
+    clients.add(ws)
+
+    async for msg in ws:
+        for c in clients:
+            if c != ws and not c.closed:
+                await c.send_str(
+                    f"[{len(clients)}人在线] {msg.data}"
+                )
+
+    clients.discard(ws)
+    return ws</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>🔌 连接生命周期自动管理</h3>
+                    <p>新客户端连接时自动加入集合，断开时使用 <span class="highlight">discard()</span> 安全移除，不会因重复移除而抛异常。</p>
+                    <p>广播前检查 <span class="highlight">closed</span> 状态，确保不会向已断开的连接发送消息。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python"># 连接时自动加入
+clients.add(ws)
+
+# 断开时安全移除
+clients.discard(ws)  # discard不会抛异常
+
+# 广播前检查连接状态
+if not c.closed:
+    await c.send_str(msg)</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>📦 极简代码，高可读性</h3>
+                    <p>服务端核心逻辑仅 <span class="highlight">30 行</span>，无外部依赖的复杂配置，开箱即用。</p>
+                    <p>客户端代码同样简洁，可作为 WebSocket 通信的 <span class="highlight">教学范例</span> 或生产级组件的起点。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python"># 服务端启动
+app = web.Application()
+app.router.add_get("/ws", ws_handler)
+web.run_app(app, port=8080)
+
+# 客户端连接
+async with session.ws_connect(
+    "ws://localhost:8080/ws"
+) as ws:
+    await ws.send_str("你好")
+    async for msg in ws:
+        print(msg.data)</code></pre></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech">
+        <div class="container">
+            <h2>技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">aiohttp</div>
+                <div class="tech-item">WebSocket</div>
+                <div class="tech-item">async/await</div>
+            </div>
+        </div>
+    <footer>
+        <div class="container">
+            <div class="source-link">
+                <a href="https://github.com/your-username/your-repo" target="_blank">源码路径: https://github.com/your-username/your-repo</a>
+            </div>
+            <p>© 2026 孙浩然. 保留所有权利.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">由 孙浩然 设计并开发</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

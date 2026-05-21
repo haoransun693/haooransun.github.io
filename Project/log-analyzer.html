@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异步日志分析系统 - 项目展示</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        header {
+            background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 20px 0; position: sticky; top: 0; z-index: 100;
+        }
+        header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #222; }
+        .nav-links a { margin-left: 20px; font-size: 0.9rem; color: #555; }
+        .nav-links a:hover { color: #3498db; }
+
+        .hero {
+            text-align: center; padding: 80px 20px;
+            background: #fff; border-radius: 12px;
+            margin: 20px auto; max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 20px; color: #222; }
+        .hero p { font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 40px; }
+        .hero .badge {
+            display: inline-block; background: #eee; color: #333;
+            padding: 6px 16px; border-radius: 20px; font-size: 0.9rem; margin: 0 5px;
+        }
+
+        section { padding: 60px 0; }
+        h2 { font-size: 2rem; margin-bottom: 40px; text-align: center; position: relative; color: #222; }
+        h2::after { content: ''; display: block; width: 50px; height: 3px; background: #3498db; margin: 15px auto 0; }
+
+        .feature-row { margin-bottom: 60px; }
+        .feature-row:nth-child(even) { }
+        .feature-text { }
+        .feature-text h3 { font-size: 1.5rem; margin-bottom: 15px; color: #222; }
+        .feature-text p { color: #555; margin-bottom: 15px; }
+        .feature-text .highlight { background: #eef; padding: 2px 8px; border-radius: 4px; font-weight: 600; color: #3498db; }
+
+        .code-demo {
+            width: 100%; margin-top: 20px;
+            background: #1e2127; border-radius: 12px; overflow: auto;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); padding: 16px;
+        }
+        .code-demo pre { margin: 0; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.78rem; line-height: 1.6; color: #a5d6ff; }
+
+        .source-link { text-align: center; margin-top: 10px; margin-bottom: 10px; font-size: 0.85rem; }
+        .source-link a { color: #3498db; text-decoration: none; }
+        .source-link a:hover { text-decoration: underline; }
+
+        .tech-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .tech-item { background: #fff; padding: 15px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); font-weight: 500; }
+
+        .output-box {
+            background: #1e2127; color: #a5d6ff; padding: 20px; border-radius: 8px;
+            font-family: 'Consolas', monospace; font-size: 0.85rem; line-height: 1.7; overflow-x: auto;
+        }
+
+        footer { text-align: center; padding: 40px 0; background: #333; color: #fff; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">📋 异步日志分析系统</div>
+            <nav class="nav-links">
+                <a href="../Project/index.html">← 返回项目列表</a>
+                <a href="#intro">项目介绍</a>
+                <a href="#features">核心亮点</a>
+                <a href="#tech">技术栈</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>异步日志分析系统</h1>
+            <p>多层生成器流水线处理日志文件：逐行读取 → JSON 解析 → 级别筛选 → 聚合统计</p>
+            <div>
+                <span class="badge">🔗 生成器流水线</span>
+                <span class="badge">📊 自动聚合</span>
+                <span class="badge">🎯 级别筛选</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="intro">
+        <div class="container">
+            <h2>项目介绍</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto; color: #555;">
+                本项目采用 <strong>生成器 (Generator)</strong> 流水线模式处理日志文件。每一层只做一件事：
+                读取 → 解析 → 筛选 → 聚合，层与层之间通过 <strong>yield</strong> 传递数据，内存占用极低。
+                支持按日志级别过滤（DEBUG → CRITICAL），自动跳过无效 JSON 行，
+                最终按级别统计数量并保留消息样本。适用于日常日志分析、监控告警预处理等场景。
+            </p>
+        </div>
+    </section>
+
+    <section id="features" style="background-color: #f9f9f9;">
+        <div class="container">
+            <h2>核心亮点</h2>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>🔗 生成器流水线，内存友好</h3>
+                    <p>每一层都是生成器函数，数据逐条 <span class="highlight">yield</span> 传递，<strong>不加载全部文件到内存</strong>。</p>
+                    <p>支持 GB 级大日志文件处理，流水线可灵活插拔：需要额外过滤层？加一个生成器即可。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">def read_log(filepath):
+    with open(filepath, "r") as f:
+        for line in f:
+            yield line.strip()
+
+def parse_log(lines):
+    for line in lines:
+        if not line:
+            continue
+        try:
+            yield json.loads(line)
+        except json.JSONDecodeError:
+            pass</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>🎯 灵活级别筛选</h3>
+                    <p>支持 <span class="highlight">5 级日志</span>：DEBUG → INFO → WARNING → ERROR → CRITICAL。</p>
+                    <p>通过 <span class="highlight">min_level</span> 参数控制最低级别，例如设为 <span class="highlight">WARNING</span> 时自动过滤掉 DEBUG 和 INFO 日志。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">def filter_level(parsed, min_level="WARNING"):
+    levels = {
+        "DEBUG": 0,
+        "INFO": 1,
+        "WARNING": 2,
+        "ERROR": 3,
+        "CRITICAL": 4
+    }
+    for record in parsed:
+        if levels.get(record.get("level", "INFO"), 0) >= levels.get(min_level, 2):
+            yield record</code></pre></div>
+            </div>
+
+            <div class="feature-row">
+                <div class="feature-text">
+                    <h3>📊 自动聚合统计</h3>
+                    <p>按日志级别自动统计数量，保留前 <span class="highlight">3 条</span> 消息样本供查看。</p>
+                    <p>聚合结果以 <span class="highlight">dict</span> 形式返回，可轻松对接告警系统或可视化仪表盘。</p>
+                </div>
+                <div class="code-demo"><pre><code class="language-python">def aggregate(records):
+    stats = defaultdict(
+        lambda: {"count": 0, "messages": []}
+    )
+    for r in records:
+        lvl = r.get("level", "UNKNOWN")
+        stats[lvl]["count"] += 1
+        stats[lvl]["messages"].append(
+            r.get("message", "")
+        )
+    return dict(stats)
+
+# 一键串联
+result = pipeline("app.log",
+                  min_level="WARNING")</code></pre></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech">
+        <div class="container">
+            <h2>技术栈</h2>
+            <div class="tech-grid">
+                <div class="tech-item">生成器 (yield)</div>
+                <div class="tech-item">yield from</div>
+                <div class="tech-item">流水线模式</div>
+                <div class="tech-item">JSON 处理</div>
+            </div>
+        </div>
+    <footer>
+        <div class="container">
+            <div class="source-link">
+                <a href="https://github.com/your-username/your-repo" target="_blank">源码路径: https://github.com/your-username/your-repo</a>
+            </div>
+            <p>© 2026 孙浩然. 保留所有权利.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.7;">由 孙浩然 设计并开发</p>
+        </div>
+    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

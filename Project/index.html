@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目列表</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            background-color: #f4f6f8;
+            line-height: 1.6;
+            color: #333;
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        .header-area { text-align: center; margin-bottom: 40px; }
+        .header-area h1 { color: #2c3e50; }
+        .header-area p { color: #666; margin-top: 10px; }
+
+        .card {
+            background: white;
+            margin-bottom: 24px;
+            padding: 28px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+        .tags { margin-bottom: 10px; }
+        .tag {
+            display: inline-block;
+            background: #eef2f7; color: #576574;
+            padding: 4px 10px; border-radius: 4px;
+            font-size: 12px; margin-right: 8px; font-weight: 500;
+        }
+
+        h2 {
+            color: #2c3e50; margin-bottom: 12px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px; display: inline-block;
+        }
+        p { color: #555; margin-bottom: 18px; font-size: 15px; line-height: 1.7; }
+
+        .btn-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+        .btn {
+            display: inline-block; padding: 10px 24px;
+            background: #3498db; color: white; text-decoration: none;
+            border-radius: 5px; font-weight: 600; font-size: 14px;
+            transition: background 0.3s; border: none; cursor: pointer;
+        }
+        .btn:hover { background: #2980b9; }
+
+        footer { text-align: center; margin-top: 40px; color: #999; font-size: 14px; }
+
+        @media (max-width: 600px) {
+            .btn-group { flex-direction: column; }
+            .btn { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-area">
+            <h1>项目列表</h1>
+            <p>个人项目作品集，涵盖 Python 异步编程、WebSocket 实时通信、AI 农业识别等领域</p>
+        </div>
+
+        <div class="card">
+            <div class="tags">
+                <span class="tag">AI</span>
+                <span class="tag">小程序</span>
+                <span class="tag">EasyDL</span>
+            </div>
+            <h2>🌾 农业识别智能问答系统</h2>
+            <p>整合百度EasyDL和Coze工作流编排与专属农业知识库，构建轻量级小程序问答助手。支持病虫害AI识别、智能问答、Coze API集成。</p>
+            <div class="btn-group">
+                <a href="1.html" class="btn">查看项目详情</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">异步</span>
+                <span class="tag">httpx</span>
+            </div>
+            <h2>☀️ 多城市天气聚合器</h2>
+            <p>使用 httpx + asyncio 并发查询 8 个城市实时天气，Semaphore 限流，结果存 CSV 并用 pandas 统计分析。</p>
+            <div class="btn-group">
+                <a href="weather.html" class="btn">查看项目详情</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">WebSocket</span>
+                <span class="tag">aiohttp</span>
+            </div>
+            <h2>💬 WebSocket 实时通信</h2>
+            <p>基于 aiohttp 的 WebSocket 服务端+客户端，支持多客户端连接、实时广播消息、在线人数统计、自动断线清理。</p>
+            <div class="btn-group">
+                <a href="websocket.html" class="btn">查看项目详情</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">数据处理</span>
+                <span class="tag">生成器</span>
+            </div>
+            <h2>📋 异步日志分析系统</h2>
+            <p>多层生成器流水线处理日志：逐行读取 → JSON 解析 → 级别筛选 → 聚合统计。内存友好，支持 GB 级大文件。</p>
+            <div class="btn-group">
+                <a href="log-analyzer.html" class="btn">查看项目详情</a>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 孙浩然. 保留所有权利。</p>
+        </footer>
+    </div>
+</body>
+</html>
